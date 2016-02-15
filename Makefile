@@ -1,6 +1,10 @@
 # First target is default target, if you just type:  make
 
-FILE=game.c
+CC=gcc
+CFLAGS=-g -O0 -I.
+DEPS = player.h items.h
+
+FILE=game.c player.c
 
 default: run
 
@@ -11,7 +15,7 @@ gdb: build
 	gdb game
 
 build: ${FILE}
-	gcc -g -O0 -o game ${FILE}
+	$(CC) $(CFLAGS) -o game ${FILE}
 
 clean:
 	rm -f game a.out *~

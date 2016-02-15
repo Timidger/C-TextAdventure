@@ -8,7 +8,7 @@
 
 
 #define COLOR_PRELUDE "<" ANSI_COLOR_GREEN
-#define END_COLOR ">" ANSI_COLOR_RESET
+#define END_COLOR ANSI_COLOR_RESET ">" 
 #define COLOR_ITEM COLOR_PRELUDE ANSI_COLOR_GREEN
 
 void reset_format(void) {

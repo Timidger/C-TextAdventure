@@ -2,7 +2,11 @@
 
 CC=gcc
 CFLAGS=-g -O0 -I.
-DEPS = player.h items.h
+DEPS=player.h items.h
+
+OBJECTS=player.o \
+		items.o \
+		display.o
 
 FILE=game.c player.c
 
@@ -14,8 +18,8 @@ run: build
 gdb: build
 	gdb game
 
-build: ${FILE}
-	$(CC) $(CFLAGS) -o game ${FILE}
+build: ${OBJECTS} ${DEPS} 
+	$(CC) $(CFLAGS) -o game ${OBJECTS} game.c
 
 clean:
-	rm -f game a.out *~
+	rm -f game a.out *~ *.o

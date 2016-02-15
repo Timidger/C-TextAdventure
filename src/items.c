@@ -31,15 +31,17 @@ item* new_item(char* name, item_type type, void* item) {
 
     cleanup:
        perror(error_message); 
-       if (new_item->name) {
+       if (new_item && new_item->name) {
            free(new_item->name);
        }
-       free(new_item);
+       if (new_item) {
+           free(new_item);
+       }
        return NULL;
 }
 
 actionable* new_actionable() {
-    struct actionable* new_item;
+    actionable* new_item;
     new_item =  malloc(sizeof(*new_item));
     if (! new_item) {
         perror("Could not allocate memory for an actionable");
@@ -49,7 +51,7 @@ actionable* new_actionable() {
 }
 
 weapon* new_weapon(int damage) {
-    struct weapon* new_item;
+    weapon* new_item;
     new_item =  malloc(sizeof(*new_item));
     if (! new_item) {
         perror("Could not allocate memory for an weapon");
@@ -60,7 +62,7 @@ weapon* new_weapon(int damage) {
 }
 
 consumable* new_consumable(int health, int mana) {
-    struct consumable* new_item;
+    consumable* new_item;
     new_item =  malloc(sizeof(*new_item));
     if (! new_item) {
         perror("Could not allocate memory for an consumable");
@@ -71,7 +73,7 @@ consumable* new_consumable(int health, int mana) {
     return new_item;
 }
 potion* new_potion(effect effect_function) {
-    struct potion* new_item;
+    potion* new_item;
     new_item =  malloc(sizeof(*new_item));
     if (! new_item) {
         perror("Could not allocate memory for an potion");

@@ -31,9 +31,13 @@ player* make_player(char* name) {
 
     cleanup:
         perror(error_message);
-        free(new_player);
+        if (new_player && new_player->name) {
+            free(new_player->name);
+        }
+        if (new_player) {
+            free(new_player);
+        }
         return NULL;
-
 }
 
 void delete_player(player* player) {

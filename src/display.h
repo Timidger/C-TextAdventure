@@ -16,5 +16,5 @@
 void reset_format(void);
 void print_items(player* player);
 void print_item(item* item);
-void info(player* player);
+char* info(player* player);
 char* get_item_name(item* item);

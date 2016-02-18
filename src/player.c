@@ -1,11 +1,17 @@
 #include "player.h"
 #include "items.h"
 #include "utils.h"
+#include "display.h"
 
+#include <math.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+
+static int count_digits(int i) {
+    return floor (log10 (abs (i))) + 1;
+}
 
 player* make_player(char* name) {
     if (! name) {
@@ -75,3 +81,49 @@ bool give_item(player* player, item** item) {
     return false;
 }
 
+char* info(player* player) {
+    if ((! player ) || (! player->name) || (! player->items)) {
+        return NULL;
+    }
+    char* output_string;
+    char* header_string_format = "Your name is " ANSI_COLOR_MAGENTA "%s" ANSI_COLOR_RESET "\n";
+    char header_string[sizeof(header_string_format)];
+    sprintf(header_string, header_string_format, player->name);
+    int header_length = strlen(header_string) + 1;
+    char * inventory_string;
+    int num_of_items = ARRAY_SIZE(player->items);
+    if (num_of_items == 0) {
+        inventory_string = "You have no inventory\n";
+        output_string = malloc((header_length + strlen(inventory_string) + 1) * sizeof(*inventory_string));
+        strcpy(output_string, header_string);
+        strcat(output_string, inventory_string);
+        return output_string;
+    } else {
+        inventory_string = "You have the following items:\n";
+        char* list_string = "\tIn item slot %d you have a %s\n";
+        // Count the size of the strings we have to add
+        int item_string_length = 0;
+        for (int i = 0; i < num_of_items; i++) {
+            if (get_item_name(player->items[i])) {
+                item_string_length += strlen(get_item_name(player->items[i])) + 1;
+            }
+            // Get the number of digits, add to how many bytes we need to add
+            item_string_length += count_digits(i + 1);
+        }
+        output_string = malloc((header_length + strlen(inventory_string) + 1 + item_string_length) * sizeof(*inventory_string));
+        strcat(output_string, header_string);
+        strcat(output_string, inventory_string);
+        for (int i = 0; i < num_of_items; i++) {
+            char* name = get_item_name(player->items[i]);
+            char buffer[sizeof(inventory_string) + strlen(name) + count_digits(i + 1)];
+            if (sprintf(buffer, list_string, i+1, name) < 0) {
+                perror("Could not format the string properly");
+                free(name);
+                return NULL;
+            }
+            strcat(output_string, buffer);
+            //free(name);
+        }
+        return output_string;
+    }
+}

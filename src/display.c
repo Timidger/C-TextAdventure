@@ -21,25 +21,6 @@ void print_items(player* player) {
     }
 }
 
-void info(player* player) {
-    if ((! player ) || (! player->name) || (! player->items)) {
-        return;
-    }
-    printf("Your name is " ANSI_COLOR_MAGENTA "%s" ANSI_COLOR_RESET "\n", player->name);
-    int num_of_items = ARRAY_SIZE(player->items);
-    if (num_of_items == 0) {
-        printf("You have nothing in your inventory\n");
-        return;
-    } 
-    printf("You have the following items:\n");
-    for (int i = 0; i < num_of_items; i++) {
-        char* name = get_item_name(player->items[i]);
-        printf("In item slot %d you have a %s\n", i + 1, 
-                name);
-        free(name);
-    }
-}
-
 void print_item(item* item) {
     char* name = get_item_name(item);
     printf("%s\n", name);

@@ -3,6 +3,7 @@
 #include "utils.h"
 #include "display.h"
 
+#include <assert.h>
 #include <math.h>
 #include <string.h>
 #include <stdlib.h>
@@ -73,7 +74,9 @@ bool give_item(player* player, item** item) {
         if (! player->items[i]) {
             player->items[i] = malloc(sizeof(*player->items[i]));
             memcpy(player->items[i], *item, sizeof(struct item));
-            free(*item);
+            player->items[i]->name = strdup((*item)->name);
+            player->items[i]->item = strdup((*item)->item);
+            delete_item(*item);
             *item = NULL;
             return true;
         }
@@ -104,25 +107,32 @@ char* info(player* player) {
         // Count the size of the strings we have to add
         int item_string_length = 0;
         for (int i = 0; i < num_of_items; i++) {
-            if (get_item_name(player->items[i])) {
-                item_string_length += strlen(get_item_name(player->items[i])) + 1;
+            char* name = get_item_name(player->items[i]);
+            if (name) {
+                item_string_length += strlen(name) + 1;
+                free(name);
             }
             // Get the number of digits, add to how many bytes we need to add
             item_string_length += count_digits(i + 1);
         }
-        output_string = malloc((header_length + strlen(inventory_string) + 1 + item_string_length) * sizeof(*inventory_string));
+        // That 1000 is to give it enough room. Not sure how to calculate exactly how much it needs, but that's enough...
+        int output_string_size = 1000 + (header_length + strlen(inventory_string) + 1 + item_string_length) * sizeof(*inventory_string);
+        output_string = malloc(output_string_size);
         strcat(output_string, header_string);
         strcat(output_string, inventory_string);
         for (int i = 0; i < num_of_items; i++) {
             char* name = get_item_name(player->items[i]);
-            char buffer[sizeof(inventory_string) + strlen(name) + count_digits(i + 1)];
+            int buffer_size = strlen(list_string) + strlen(name) + 1 + count_digits(i + 1);
+            char buffer[buffer_size];
             if (sprintf(buffer, list_string, i+1, name) < 0) {
                 perror("Could not format the string properly");
                 free(name);
                 return NULL;
             }
+            assert(strlen(buffer) <= buffer_size);
+            free(name);
             strcat(output_string, buffer);
-            //free(name);
+            assert(strlen(output_string) <= output_string_size);
         }
         return output_string;
     }

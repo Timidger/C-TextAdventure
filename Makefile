@@ -3,7 +3,7 @@
 BUILD_DIR=target
 SOURCE_DIR=src
 CC=gcc
-CFLAGS=-g -O0 -I. -lm
+CFLAGS=-g -O0 -I. -lm -Wall
 DEPS=$(SOURCE_DIR)/player.h \
 	 $(SOURCE_DIR)/items.h
 

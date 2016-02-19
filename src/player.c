@@ -63,7 +63,7 @@ void delete_player(player* player) {
 }
 
 struct item* get_item_from_player(player* player, char* item_name) {
-    get_item(player->items, ARRAY_SIZE(player->items), item_name);
+    return get_item(player->items, ARRAY_SIZE(player->items), item_name);
 };
 
 bool give_item(player* player, item** item) {

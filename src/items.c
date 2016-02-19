@@ -105,6 +105,7 @@ void delete_item(item* item) {
     if (item->name) {
         free(item->name);
     }
+    // If the other types become more complicated, this has to free their mem
     if (item->item) {
         free(item->item);
     }

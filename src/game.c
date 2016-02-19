@@ -18,17 +18,19 @@ int main(void) {
     char*  player_info;
     player_info = info(player);
     printf(player_info);
+    free(player_info);
     give_item(player, &compass);
     give_item(player, &sword);
     give_item(player, &health_potion);
 
     player_info = info(player);
     printf(player_info);
-    //free(player_info);
+    free(player_info);
     // This deletes the items he owns
     delete_player(player);
     // Should print nothing now that he is deleted
     player_info = info(player);
+    free(player_info);
     printf(player_info);
     // This does nothing, but if we remove the give item to player, this will actually free the item
     // Because we gave it to player though, the item has already been freed and set to null

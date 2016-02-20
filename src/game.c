@@ -60,11 +60,10 @@ int main(int argc, char* argv[]) {
         return 0;
     }
     reset_format();
-    printf(  "You awaken in a room. A very familiar room. This is your room. It has been your room for as"
+    printf( "You awaken in a room. A very familiar room. This is your room. It has been your room for as"
             " long as you can remember. Unfortunately it will not be your room for very long. Your "
-            // We should add a display function for points of interest, like parents. Make them bold or something
             ANSI_BOLD "PARENTS " ANSI_COLOR_RESET "have decided that your room will be taken by "
-            "your new baby brother, " ANSI_BOLD "ALEX" ANSI_COLOR_RESET ", born just last week."
+            "your parent's new baby, " ANSI_BOLD "ALEX" ANSI_COLOR_RESET ", born just last week."
             " For the first week he was sleeping your parents, but they soon got tired of that. So they fixed the"
             " leaky pipe that had caused the basement to leak last year so that they could put the baby in your room"
             " while you would take the basement. They didn't ask you of course. Not their lovely first born."
@@ -94,5 +93,31 @@ int main(int argc, char* argv[]) {
     char* chosen = choose(options, ARRAY_SIZE(options));
     // Set the gender
     set_player_gender(player, parse_gender(chosen));
+    char gender_text[1000];
+    char* baby_gender;
+    char* baby_pronoun;
+    switch(player->gender) {
+        case boy:
+        case girl:
+            baby_gender =  (strcmp(chosen, "boy") == 0) ? "sister" : "brother";
+            baby_pronoun = (strcmp(chosen, "boy") == 0) ? "she" : "he";
+            sprintf(gender_text, "A %s! " ANSI_COLOR_MAGENTA "%s" ANSI_COLOR_RESET
+                   " is such a stupid name for a %s, you much prefer the "
+                   "name " ANSI_BOLD "ALEX" ANSI_COLOR_RESET ". "
+                   "But of course your stupid parents went and "
+                   "called your new baby %s that. Probably just to mess with you. "
+                   "Jokes on them though, they'll probably have to spend a fortune "
+                   "in therapy bills for all the crap %s'll have to put up with in school."
+                   " You should know, you're only in 7th grade and you've been bullied"
+                   " ruthlessly for being a %s named " ANSI_COLOR_MAGENTA "%s" ANSI_COLOR_RESET
+                   ", which isn't nearly as bad as being a %s named " ANSI_BOLD "ALEX" ANSI_COLOR_RESET 
+                   ANSI_BLINK ". . ." ANSI_COLOR_RESET "\n",
+                   chosen, player->name, chosen, baby_gender, baby_pronoun, chosen, player->name, chosen);
+            break;
+        case neither:
+            strcpy(gender_text, NULL);
+            break;
+    }
+    printf(gender_text, player->name);
     return 0;
 }

@@ -38,6 +38,21 @@ void test(void) {
     delete_item(compass);
 }
 
+// Should figure out where to put. Player? Display? Some input module?
+gender parse_gender(char* input) {
+    if (strcmp(input, "boy") == 0) {
+        return boy;
+    } else if (strcmp(input, "girl") == 0) {
+        return girl;
+    } else if (strcmp(input, "neither") == 0) {
+        return neither;
+    } else {
+        perror("Incorrect gender choice");
+        exit(-1);
+        //return neither;
+    }
+}
+
 
 int main(int argc, char* argv[]) {
     if (argc > 1 && strcmp(argv[1], "--test") == 0) {
@@ -77,5 +92,7 @@ int main(int argc, char* argv[]) {
     // Get gender
     char* options[] = {"boy", "girl", "neither"};
     char* chosen = choose(options, ARRAY_SIZE(options));
+    // Set the gender
+    set_player_gender(player, parse_gender(chosen));
     return 0;
 }

@@ -137,3 +137,11 @@ char* info(player* player) {
         return output_string;
     }
 }
+
+void set_player_gender(player* player, gender option) {
+    if (! player || ! player->name) {
+        perror("Player not initalised properly");
+        return;
+    }
+    player->gender = option;
+}

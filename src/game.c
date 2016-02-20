@@ -56,21 +56,25 @@ int main(int argc, char* argv[]) {
             " Not their straight A, wonderful, positively angelic first child named . . .\n\n"
             " What is your name again" ANSI_BLINK " . . . ?" ANSI_COLOR_RESET);
     fflush(stdout);
-    // Make it not wait for end of line. Not portable, rather gross. Put in display
+
+    // Single key input grab
     raw_mode();
-    // Get character, throw away
     hide_terminal_input();
     getchar();
     show_terminal_input();
     cooked_mode();
+
+    // Actually get the name
     printf("\n\nName: ");
-    // AND reset to the previous satte
     char* name = malloc(32);
     name = get_input(32);
+    // Make the player
+    player* player = make_player(name);
     printf(". . . named" ANSI_COLOR_MAGENTA " %s" ANSI_COLOR_GRAY "!"
            " Of course. You know your own name."
            "  Though you have always thought it a stupid name"
           " for a " ANSI_BLINK ". . ." ANSI_COLOR_RESET "\n", name);
+    // Get gender
     char* options[] = {"boy", "girl", "neither"};
     char* chosen = choose(options, ARRAY_SIZE(options));
     return 0;

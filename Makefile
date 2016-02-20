@@ -18,12 +18,15 @@ default: run
 run: build
 	$(BUILD_DIR)/game
 
+test: build
+	$(BUILD_DIR)/game --test
+
 gdb: build
 	gdb $(BUILD_DIR)/game
 
 build: ${OBJECTS} ${DEPS} 
 	$(CC) $(CFLAGS) -o target/game ${OBJECTS} ${MAIN_FILE}
-	rm src/*.o
+	# rm src/*.o
 
 clean:
 	rm -f target/game *~ src/*.o

@@ -91,7 +91,7 @@ item* get_item(item* items[], int item_size, char* item_name) {
         if (! items[i]) {
             continue;
         }
-        if (items[i]->name == item_name) {
+        if (strcmp(items[i]->name, item_name) == 0) {
             return items[i];
         }
     }

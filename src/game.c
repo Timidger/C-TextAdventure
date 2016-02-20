@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "display.h"
 #include "player.h"
@@ -7,7 +8,7 @@
 #include "utils.h"
 
 
-int main(void) {
+void test(void) {
     player* player = make_player("Timidger");
     item* compass = new_item("Compass", actionable_type, (void*) new_actionable());
     item* sword = new_item("Sword", weapon_type, (void*) new_weapon(5));
@@ -35,4 +36,42 @@ int main(void) {
     // This does nothing, but if we remove the give item to player, this will actually free the item
     // Because we gave it to player though, the item has already been freed and set to null
     delete_item(compass);
+}
+
+
+int main(int argc, char* argv[]) {
+    if (argc > 1 && strcmp(argv[1], "--test") == 0) {
+        test();
+        return 0;
+    }
+    reset_format();
+    printf(  "You awaken in a room. A very familiar room. This is your room. It has been your room for as"
+            " long as you can remember. Unfortunately it will not be your room for very long. Your "
+            // We should add a display function for points of interest, like parents. Make them bold or something
+            ANSI_BOLD "PARENTS " ANSI_COLOR_RESET "have decided that your room will be taken by "
+            "your new baby brother, " ANSI_BOLD "ALEX" ANSI_COLOR_RESET ", born just last week."
+            " For the first week he was sleeping your parents, but they soon got tired of that. So they fixed the"
+            " leaky pipe that had caused the basement to leak last year so that they could put the baby in your room"
+            " while you would take the basement. They didn't ask you of course. Not their lovely first born."
+            " Not their straight A, wonderful, positively angelic first child named . . .\n\n"
+            " What is your name again" ANSI_BLINK " . . . ?" ANSI_COLOR_RESET);
+    fflush(stdout);
+    // Make it not wait for end of line. Not portable, rather gross. Put in display
+    raw_mode();
+    // Get character, throw away
+    hide_terminal_input();
+    getchar();
+    show_terminal_input();
+    cooked_mode();
+    printf("\n\nName: ");
+    // AND reset to the previous satte
+    char* name = malloc(32);
+    name = get_input(32);
+    printf(". . . named" ANSI_COLOR_MAGENTA " %s" ANSI_COLOR_GRAY "!"
+           " Of course. You know your own name."
+           "  Though you have always thought it a stupid name"
+          " for a " ANSI_BLINK ". . ." ANSI_COLOR_RESET "\n", name);
+    char* options[] = {"boy", "girl", "neither"};
+    char* chosen = choose(options, ARRAY_SIZE(options));
+    return 0;
 }
